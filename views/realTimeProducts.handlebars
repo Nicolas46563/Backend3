@@ -1,0 +1,60 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carritos Confirmados</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <h1>Últimos Carritos Confirmados</h1>
+    <div class="carts-container" id="realtime-carts">
+        <!-- Los carritos aparecerán aquí -->
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const cartsContainer = document.getElementById('realtime-carts');
+
+        async function loadConfirmedCarts() {
+            try {
+                const response = await fetch('/api/carts/confirmed');
+                const carts = await response.json();
+
+                cartsContainer.innerHTML = '';
+
+                if (carts.length === 0) {
+                    cartsContainer.innerHTML = '<p>No hay carritos confirmados aún.</p>';
+                    return;
+                }
+
+                carts.forEach(cart => {
+                    const cartDiv = document.createElement('div');
+                    cartDiv.classList.add('cart');
+                    cartDiv.innerHTML = `
+                        <h3>Carrito ID: ${cart._id}</h3>
+                        ${cart.products.length > 0 ? `
+                            <ul>
+                                ${cart.products.map(product => `
+                                    <li>
+                                        <img src="${product.product.thumbnails[0]}" alt="${product.product.title}">
+                                        <span><strong>${product.product.title}</strong>: 
+                                        Cantidad: ${product.quantity} - 
+                                        Precio: $${product.product.price.toFixed(2)}</span>
+                                    </li>
+                                `).join('')}
+                            </ul>
+                            <p><strong>Total:</strong> $${cart.products.reduce((total, p) => total + (p.quantity * p.product.price), 0).toFixed(2)}</p>
+                        ` : '<p>El carrito está vacío.</p>'}
+                    `;
+                    cartsContainer.appendChild(cartDiv);
+                });
+
+            } catch (error) {
+                console.error('Error al cargar carritos:', error);
+                cartsContainer.innerHTML = '<p>Error al cargar los carritos.</p>';
+            }
+        }
+
+        // Cargar los carritos confirmados al cargar la página
+        loadConfirmedCarts();
+    </script>
+</body>
