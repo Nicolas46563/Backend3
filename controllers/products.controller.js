@@ -1,5 +1,5 @@
-const Product = require('../models/Product');
-const Joi = require('joi');
+import Product from '../models/Product.js';
+import Joi from 'joi';
 
 // Esquema de validación para productos
 const productSchema = Joi.object({
@@ -14,7 +14,7 @@ const productSchema = Joi.object({
 });
 
 // Obtener todos los productos con filtros, paginación y ordenamiento
-exports.getAllProducts = async (req, res) => {
+export const getAllProducts = async (req, res) => {
     const limit = Math.max(Number(req.query.limit) || 10, 1); // Límite mínimo 1
     const page = Math.max(Number(req.query.page) || 1, 1); // Página mínima 1
     const sort = req.query.sort && ['price', 'name', 'createdAt'].includes(req.query.sort) ? req.query.sort : null;
@@ -52,7 +52,7 @@ exports.getAllProducts = async (req, res) => {
 };
 
 // Crear un nuevo producto
-exports.createProduct = async (req, res) => {
+export const createProduct = async (req, res) => {
     try {
         const { error, value } = productSchema.validate(req.body);
         if (error) {
@@ -69,7 +69,7 @@ exports.createProduct = async (req, res) => {
 };
 
 // Crear productos en masa
-exports.bulkCreateProducts = async (req, res) => {
+export const bulkCreateProducts = async (req, res) => {
     try {
         const { products } = req.body;
 
@@ -95,7 +95,7 @@ exports.bulkCreateProducts = async (req, res) => {
 };
 
 // Actualizar un producto por ID
-exports.updateProduct = async (req, res) => {
+export const updateProduct = async (req, res) => {
     try {
         const { id } = req.params;
         const { error, value } = productSchema.validate(req.body);
@@ -117,7 +117,7 @@ exports.updateProduct = async (req, res) => {
 };
 
 // Eliminar un producto por ID
-exports.deleteProduct = async (req, res) => {
+export const deleteProduct = async (req, res) => {
     try {
         const { id } = req.params;
 

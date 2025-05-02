@@ -1,4 +1,4 @@
-const User = require('../../models/User');
+import User from '../../models/User.js';
 
 class UserDAO {
   async getById(id) {
@@ -26,4 +26,4 @@ class UserDAO {
   }
 }
 
-module.exports = new UserDAO();
+export default UserDAO;

@@ -1,4 +1,4 @@
-const Pet = require('../../models/Pet');
+import Pet from '../../models/Pet.js';
 
 class PetDAO {
   async createMany(pets) {
@@ -6,4 +6,4 @@ class PetDAO {
   }
 }
 
-module.exports = new PetDAO();
+export default PetDAO;

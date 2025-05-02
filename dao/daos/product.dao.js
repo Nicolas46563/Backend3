@@ -1,5 +1,3 @@
-const Cart = require('../../models/Cart');
-
 class ProductDAO {
   async getAll() {
     return await Product.find();
@@ -22,4 +20,4 @@ class ProductDAO {
   }
 }
 
-module.exports = new ProductDAO();
+export default ProductDAO;

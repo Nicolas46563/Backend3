@@ -1,8 +1,8 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const userDAO = require('../dao/daos/user.dao');
-const petDAO = require('../dao/daos/pet.dao');
-const { generateUsers, generatePets } = require('../utils/mocking.utils');
+import userDAO from '../dao/daos/user.dao.js';
+import petDAO from '../dao/daos/pet.dao.js';
+import { generateUsers, generatePets } from '../utils/mocking.utils.js';
 
 // 🔹 Endpoint migrado desde desafío anterior
 router.get('/mockingpets', (req, res) => {
@@ -47,4 +47,4 @@ router.post('/generateData', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

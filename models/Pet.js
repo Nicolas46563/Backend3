@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const petSchema = new mongoose.Schema({
   name: String,
@@ -6,4 +6,5 @@ const petSchema = new mongoose.Schema({
   age: Number
 });
 
-module.exports = mongoose.model('Pet', petSchema);
+const Pet = mongoose.model('Pet', petSchema);
+export default Pet;

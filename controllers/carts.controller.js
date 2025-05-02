@@ -1,7 +1,7 @@
-const Cart = require('../models/Cart');
-const Product = require('../models/Product');
-const mongoose = require('mongoose'); // Importa mongoose
-const Joi = require('joi');
+import Cart from '../models/Cart.js';
+import Product from '../models/Product.js';
+import mongoose from 'mongoose';
+import Joi from 'joi';
 
 // Esquema para validar un solo producto dentro del carrito
 const productInCartSchema = Joi.object({
@@ -17,7 +17,7 @@ const productInCartSchema = Joi.object({
 });
 
 // Crear un nuevo carrito
-exports.createCart = async (req, res) => {
+export const createCart = async (req, res) => {
     try {
         const { products } = req.body;
 
@@ -46,7 +46,7 @@ exports.createCart = async (req, res) => {
 };
 
 // Obtener un carrito por ID
-exports.getCartById = async (req, res) => {
+export const getCartById = async (req, res) => {
     try {
         const { id } = req.params;
         const cart = await Cart.findById(id).populate('products.product');
@@ -62,7 +62,7 @@ exports.getCartById = async (req, res) => {
 };
 
 // Agregar un producto al carrito
-exports.addProductToCart = async (req, res) => {
+export const addProductToCart = async (req, res) => {
     try {
         const { id } = req.params;
         const { error, value } = productInCartSchema.validate(req.body);
@@ -96,7 +96,7 @@ exports.addProductToCart = async (req, res) => {
 };
 
 // Agregar productos en masa al carrito con un JSON estructurado
-exports.addMultipleProductsToCart = async (req, res) => {
+export const addMultipleProductsToCart = async (req, res) => {
     try {
         const { id } = req.params;
         const { title, products } = req.body;
@@ -139,24 +139,8 @@ exports.addMultipleProductsToCart = async (req, res) => {
     }
 };
 
-// Confirmar un carrito
-exports.confirmCart = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const cart = await Cart.findById(id).populate('products.product');
-
-        if (!cart) {
-            return res.status(404).json({ error: 'Carrito no encontrado' });
-        }
-
-        res.json({ message: 'Carrito confirmado', cart });
-    } catch (error) {
-        res.status(500).json({ error: 'Error al confirmar el carrito', details: error.message });
-    }
-};
-
 // Obtener los últimos carritos confirmados
-exports.getConfirmedCarts = async (req, res) => {
+export const getConfirmedCarts = async (req, res) => {
     try {
         const carts = await Cart.find({})
             .sort({ createdAt: -1 })
@@ -169,7 +153,7 @@ exports.getConfirmedCarts = async (req, res) => {
     }
 };
 
-exports.removeProductFromCart = async (req, res) => {
+export const removeProductFromCart = async (req, res) => {
     try {
         const { id, productId } = req.params;
         const cart = await Cart.findById(id);
@@ -192,7 +176,7 @@ exports.removeProductFromCart = async (req, res) => {
 };
 
 // Confirmar un carrito
-exports.confirmCart = async (req, res) => {
+export const confirmCart = async (req, res) => {
     try {
         const { id } = req.params;
 

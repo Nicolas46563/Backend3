@@ -1,4 +1,4 @@
-const Cart = require('../../models/Cart');
+import Cart from '../../models/Cart.js';
 
 class CartDAO {
   async getById(id) {
@@ -18,4 +18,4 @@ class CartDAO {
   }
 }
 
-module.exports = new CartDAO();
+export default CartDAO;

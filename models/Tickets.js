@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const { v4: uuidv4 } = require('uuid');
+import mongoose from 'mongoose';
+import { uuidv4 } from 'uuid';
 
 const ticketSchema = new mongoose.Schema({
   code: { type: String, unique: true, default: uuidv4 },
@@ -8,4 +8,5 @@ const ticketSchema = new mongoose.Schema({
   purchaser: { type: String, required: true }
 });
 
-module.exports = mongoose.model('Ticket', ticketSchema);
+const Ticket = mongoose.model('Ticket', ticketSchema);
+export default Ticket;

@@ -1,12 +1,55 @@
-const express = require('express');
-const jwt = require('jsonwebtoken');
-const passport = require('passport');
-const User = require('../models/User');
-const { createHash, isValidPassword } = require('../utils/hash');
+import express from 'express';
+import jwt from 'jsonwebtoken';
+import passport from 'passport';
+import User from '../models/User.js';
+import { createHash, isValidPassword } from '../utils/hash.js';
 
 const router = express.Router();
 
-// 🔹 Registro de Usuario
+/**
+ * @swagger
+ * tags:
+ *   name: Users
+ *   description: Operaciones relacionadas con usuarios
+ */
+
+/**
+ * @swagger
+ * /api/sessions/register:
+ *   post:
+ *     summary: Registrar un nuevo usuario
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - first_name
+ *               - last_name
+ *               - email
+ *               - age
+ *               - password
+ *             properties:
+ *               first_name:
+ *                 type: string
+ *               last_name:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               age:
+ *                 type: integer
+ *               password:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Usuario registrado exitosamente
+ *       400:
+ *         description: Email ya registrado
+ *       500:
+ *         description: Error al registrar usuario
+ */
 router.post('/register', async (req, res) => {
   try {
     const { first_name, last_name, email, age, password } = req.body;
@@ -30,7 +73,34 @@ router.post('/register', async (req, res) => {
   }
 });
 
-// 🔹 Login con JWT
+/**
+ * @swagger
+ * /api/sessions/login:
+ *   post:
+ *     summary: Iniciar sesión con JWT
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Login exitoso
+ *       401:
+ *         description: Credenciales inválidas
+ *       500:
+ *         description: Error al iniciar sesión
+ */
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -54,9 +124,22 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// 🔹 Ruta `/current` para validar sesión
+/**
+ * @swagger
+ * /api/sessions/current:
+ *   get:
+ *     summary: Obtener datos del usuario autenticado
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Datos del usuario logueado
+ *       401:
+ *         description: Token inválido o no enviado
+ */
 router.get('/current', passport.authenticate('jwt', { session: false }), (req, res) => {
   res.json({ user: req.user });
 });
 
-module.exports = router; 
+export default router;

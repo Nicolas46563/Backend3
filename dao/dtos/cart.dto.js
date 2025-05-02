@@ -10,5 +10,4 @@ class CartDTO {
     }
   }
   
-  module.exports = CartDTO;
-  
+export default CartDTO;

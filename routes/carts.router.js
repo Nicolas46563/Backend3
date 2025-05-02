@@ -1,5 +1,5 @@
-const express = require('express');
-const {
+import express from 'express';
+import {
     createCart,
     getCartById,
     addProductToCart,
@@ -7,12 +7,12 @@ const {
     confirmCart,
     addMultipleProductsToCart,
     getConfirmedCarts
-} = require('../controllers/carts.controller');
+} from '../controllers/carts.controller.js';
 
-const cartDAO = require('../dao/daos/cart.dao');
-const productDAO = require('../dao/daos/product.dao');
-const ticketDAO = require('../dao/daos/ticket.dao');
-const TicketDTO = require('../dao/dtos/ticket.dto');
+import cartDAO from '../dao/daos/cart.dao.js';
+import productDAO from '../dao/daos/product.dao.js';
+import ticketDAO from '../dao/daos/ticket.dao.js';
+import TicketDTO from '../dao/dtos/ticket.dto.js';
 
 const router = express.Router();
 
@@ -110,4 +110,4 @@ router.post('/:cid/purchase', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

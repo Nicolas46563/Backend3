@@ -1,12 +1,11 @@
 class TicketDTO {
-    constructor(ticket) {
-      this.id = ticket._id;
-      this.code = ticket.code;
-      this.date = ticket.purchase_datetime;
-      this.amount = ticket.amount;
-      this.purchaser = ticket.purchaser;
-    }
+  constructor(ticket) {
+    this.id = ticket._id;
+    this.code = ticket.code;
+    this.date = ticket.purchase_datetime;
+    this.amount = ticket.amount;
+    this.purchaser = ticket.purchaser;
   }
-  
-  module.exports = TicketDTO;
-  
+}
+
+export default TicketDTO;

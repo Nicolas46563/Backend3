@@ -1,7 +1,7 @@
-const { faker } = require('@faker-js/faker');
-const bcrypt = require('bcrypt');
+import { faker } from '@faker-js/faker';
+import bcrypt from 'bcrypt';
 
-const generateUsers = (count = 50) => {
+export const generateUsers = (count = 50) => {
   const users = [];
   const hashedPassword = bcrypt.hashSync('coder123', 10);
 
@@ -20,7 +20,7 @@ const generateUsers = (count = 50) => {
   return users;
 };
 
-const generatePets = (count = 50) => {
+export const generatePets = (count = 50) => {
   const pets = [];
 
   for (let i = 0; i < count; i++) {
@@ -33,5 +33,3 @@ const generatePets = (count = 50) => {
 
   return pets;
 };
-
-module.exports = { generateUsers, generatePets };

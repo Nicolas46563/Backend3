@@ -1,26 +1,22 @@
-const passport = require('passport');
-const { Strategy: JwtStrategy, ExtractJwt } = require('passport-jwt');
-const User = require('../models/User');
+import passport from 'passport';
+import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
+import User from '../models/User.js';
 
-const cookieExtractor = (req) => {
-  let token = null;
-  if (req && req.cookies) token = req.cookies.jwt;
-  return token;
-};
-
-const opts = {
-  jwtFromRequest: ExtractJwt.fromExtractors([cookieExtractor]),
+const options = {
+  jwtFromRequest: ExtractJwt.fromExtractors([
+    req => req?.cookies?.jwt || null
+  ]),
   secretOrKey: process.env.JWT_SECRET || 'secretKey'
 };
 
-passport.use(new JwtStrategy(opts, async (jwt_payload, done) => {
+passport.use(new JwtStrategy(options, async (jwtPayload, done) => {
   try {
-    const user = await User.findById(jwt_payload.id);
-    if (user) return done(null, user);
-    return done(null, false);
-  } catch (err) {
-    return done(err, false);
+    const user = await User.findById(jwtPayload.id);
+    if (!user) return done(null, false);
+    return done(null, user);
+  } catch (error) {
+    return done(error, false);
   }
 }));
 
-module.exports = passport;
+export default passport;

@@ -1,6 +1,6 @@
-const express = require('express');
-const Product = require('../models/Product');
-const Cart = require('../models/Cart');
+import express from 'express';
+import Product from '../models/Product.js';
+
 const router = express.Router();
 
 // Página principal
@@ -26,4 +26,4 @@ router.get('/realtimeproducts', (req, res) => {
     res.render('realTimeProducts', { title: 'Productos en Tiempo Real' });
 });
 
-module.exports = router;
+export default router;

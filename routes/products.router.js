@@ -1,11 +1,11 @@
-const express = require('express');
-const {
+import express from 'express';
+import {
     getAllProducts,
     createProduct,
     bulkCreateProducts,
     updateProduct,
     deleteProduct
-} = require('../controllers/products.controller');
+} from '../controllers/products.controller.js';
 
 const router = express.Router();
 
@@ -24,7 +24,8 @@ router.put('/:id', updateProduct);
 // Eliminar un producto por ID
 router.delete('/:id', deleteProduct);
 
-module.exports = router;
+export default router;
+
 
 /**
  * @swagger

@@ -1,5 +1,3 @@
-const Cart = require('../../models/Cart');
-
 class TicketDAO {
   async create(ticketData) {
     return await Ticket.create(ticketData);
@@ -14,4 +12,4 @@ class TicketDAO {
   }
 }
 
-module.exports = new TicketDAO();
+export default TicketDAO;

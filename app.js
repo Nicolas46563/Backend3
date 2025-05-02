@@ -1,35 +1,41 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const { create } = require('express-handlebars');
-const path = require('path');
-const swaggerUi = require('swagger-ui-express');
-const swaggerSpecs = require('./swagger');
-const cookieParser = require('cookie-parser');
-const passport = require('passport');
-require('./config/passport'); // Configuración de Passport
-require('dotenv').config();
+import express from 'express';
+import mongoose from 'mongoose';
+import { create } from 'express-handlebars';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+import swaggerUi from 'swagger-ui-express';
+import swaggerSpecs from './swagger.js';
+import cookieParser from 'cookie-parser';
+import passport from 'passport';
+import './config/passport.js';
+import dotenv from 'dotenv';
+dotenv.config();
 
-const mocksRouter = require('./routes/mocks.router');
+import productsRouter from './routes/products.router.js';
+import cartsRouter from './routes/carts.router.js';
+import viewsRouter from './routes/views.router.js';
+import sessionRouter from './routes/session.router.js';
+import mocksRouter from './routes/mocks.router.js';
+import adoptionRouter from './routes/adoption.router.js';
 
-// Rutas
-const productsRouter = require('./routes/products.router');
-const cartsRouter = require('./routes/carts.router');
-const viewsRouter = require('./routes/views.router');
-const sessionRouter = require('./routes/session.router'); // Nueva ruta de autenticación
+// Compatibilidad con __dirname en ES Modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const app = express();
 
-// Configuración de Handlebars con un helper para acceder a índices
+// Configuración de Handlebars con helper
 const hbs = create({
     defaultLayout: 'main',
     layoutsDir: path.join(__dirname, 'views', 'layouts'),
     partialsDir: path.join(__dirname, 'views', 'partials'),
     runtimeOptions: {
-        allowProtoPropertiesByDefault: true, // Permite propiedades heredadas
-        allowProtoMethodsByDefault: true,   // Permite métodos heredados (opcional)
+        allowProtoPropertiesByDefault: true,
+        allowProtoMethodsByDefault: true,
     },
     helpers: {
-        getIndex: (array, index) => (Array.isArray(array) ? array[index] : ''), // Helper para obtener índices de arrays
+        getIndex: (array, index) => (Array.isArray(array) ? array[index] : ''),
     },
 });
 
@@ -41,8 +47,8 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(cookieParser()); // Para manejar cookies
-app.use(passport.initialize()); // Iniciar Passport
+app.use(cookieParser());
+app.use(passport.initialize());
 
 // Documentación de APIs
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
@@ -62,18 +68,22 @@ mongoose.connect(process.env.MONGO_URI, {
 app.use('/api/products', productsRouter);
 app.use('/api/carts', cartsRouter);
 app.use('/api/sessions', sessionRouter);
-app.use('/api/mocks', mocksRouter); // ✅ CORRECTO lugar
+app.use('/api/mocks', mocksRouter);
+app.use('/api/adoptions', adoptionRouter);
 
 // Rutas de vistas
 app.use('/', viewsRouter);
 
-// Manejo de Rutas No Encontradas
+// Manejo de 404
 app.use((req, res) => {
     res.status(404).render('404', { title: 'Página no encontrada' });
 });
 
-// Iniciar servidor
+// Servidor
 const PORT = process.env.PORT || 8580;
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
+
+// Exportar para SuperTest
+export default app;
